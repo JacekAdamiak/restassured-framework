@@ -16,7 +16,7 @@ import pl.javastart.restassured.tests.testbases.SuiteTestBase;
 import static io.restassured.RestAssured.given;
 import static org.testng.Assert.assertEquals;
 
-public class CreatePetTests extends SuiteTestBase {
+public class CreatePetTests extends PetTestBase {
 
     private Pet actualPet;
 
@@ -36,6 +36,8 @@ public class CreatePetTests extends SuiteTestBase {
                 .assertRequestSuccess()
                 .getResponseModel();
 
+        petIdToDelete = actualPet.getId();
+
 
 //        actualPet = given().spec(RequestConfigurationBuilder.getDefaultRequestSpecification())
 //                .body(pet)
@@ -50,32 +52,32 @@ public class CreatePetTests extends SuiteTestBase {
                 .usingRecursiveComparison().isEqualTo(pet);
     }
 
-    @AfterMethod
-    public void cleanUpAfterTest() {
-
-        ApiResponse apiResponse = new DeletePetEndpoint()
-                .setPetId(actualPet.getId())
-                .sendRequest()
-                .assertRequestSuccess()
-                .getResponseModel();
-
-//        ApiResponse apiResponse = given().spec(RequestConfigurationBuilder.getDefaultRequestSpecification())
-//                .when().delete("pet/{petId}", actualPet.getId())
-//                .then().statusCode(HttpStatus.SC_OK).extract().as(ApiResponse.class);
-
-//        assertEquals(apiResponse.getCode(), Integer.valueOf(200), "Code");
-//        assertEquals(apiResponse.getType(), "unknown", "Type");
-//        assertEquals(apiResponse.getMessage(), actualPet.getId().toString(), "Message");
-
-        ApiResponse expectedApiResponse = new ApiResponse();
-        expectedApiResponse.setCode(HttpStatus.SC_OK);
-        expectedApiResponse.setType("unknown");
-        expectedApiResponse.setMessage(actualPet.getId().toString());
-
-        Assertions.assertThat(apiResponse).describedAs("API Response from system was not as expected")
-                .usingRecursiveComparison().isEqualTo(expectedApiResponse);
-
-
-    }
+//    @AfterMethod
+//    public void cleanUpAfterTest() {
+//
+////        ApiResponse apiResponse = new DeletePetEndpoint()
+////                .setPetId(actualPet.getId())
+////                .sendRequest()
+////                .assertRequestSuccess()
+////                .getResponseModel();
+////
+//////        ApiResponse apiResponse = given().spec(RequestConfigurationBuilder.getDefaultRequestSpecification())
+//////                .when().delete("pet/{petId}", actualPet.getId())
+//////                .then().statusCode(HttpStatus.SC_OK).extract().as(ApiResponse.class);
+////
+//////        assertEquals(apiResponse.getCode(), Integer.valueOf(200), "Code");
+//////        assertEquals(apiResponse.getType(), "unknown", "Type");
+//////        assertEquals(apiResponse.getMessage(), actualPet.getId().toString(), "Message");
+////
+////        ApiResponse expectedApiResponse = new ApiResponse();
+////        expectedApiResponse.setCode(HttpStatus.SC_OK);
+////        expectedApiResponse.setType("unknown");
+////        expectedApiResponse.setMessage(actualPet.getId().toString());
+////
+////        Assertions.assertThat(apiResponse).describedAs("API Response from system was not as expected")
+////                .usingRecursiveComparison().isEqualTo(expectedApiResponse);
+////
+//
+//    }
 
 }

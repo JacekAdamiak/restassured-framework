@@ -15,7 +15,7 @@ import pl.javastart.restassured.main.rop.UpdatePetEndpoint;
 import pl.javastart.restassured.main.test.data.PetTestDataGenerator;
 import pl.javastart.restassured.tests.testbases.SuiteTestBase;
 
-public class UpdatePetTests extends SuiteTestBase {
+public class UpdatePetTests extends PetTestBase {
 
 
     private Pet petBeforeUpdate;
@@ -30,6 +30,8 @@ public class UpdatePetTests extends SuiteTestBase {
                 .sendRequest()
                 .assertRequestSuccess()
                 .getResponseModel();
+
+        petIdToDelete = petBeforeUpdate.getId();
 
         Assertions.assertThat(petBeforeUpdate).describedAs("Send Pet was different than received by API")
                 .usingRecursiveComparison().isEqualTo(pet);
@@ -70,24 +72,24 @@ public class UpdatePetTests extends SuiteTestBase {
                 .usingRecursiveComparison().isNotEqualTo(petBeforeUpdate);
     }
 
-    @AfterTest
-    public void cleanUpAfterTest() {
-
-        ApiResponse apiResponse = new DeletePetEndpoint()
-                .setPetId(petBeforeUpdate.getId())
-                .sendRequest()
-                .assertRequestSuccess()
-                .getResponseModel();
-
-        ApiResponse expectedApiResponse = new ApiResponse();
-        expectedApiResponse.setCode(HttpStatus.SC_OK);
-        expectedApiResponse.setType("unknown");
-        expectedApiResponse.setMessage(petBeforeUpdate.getId().toString());
-
-        Assertions.assertThat(apiResponse).describedAs("API Response from system was not as expected")
-                .usingRecursiveComparison().isEqualTo(expectedApiResponse);
-
-    }
+//    @AfterTest
+//    public void cleanUpAfterTest() {
+//
+//        ApiResponse apiResponse = new DeletePetEndpoint()
+//                .setPetId(petBeforeUpdate.getId())
+//                .sendRequest()
+//                .assertRequestSuccess()
+//                .getResponseModel();
+//
+//        ApiResponse expectedApiResponse = new ApiResponse();
+//        expectedApiResponse.setCode(HttpStatus.SC_OK);
+//        expectedApiResponse.setType("unknown");
+//        expectedApiResponse.setMessage(petBeforeUpdate.getId().toString());
+//
+//        Assertions.assertThat(apiResponse).describedAs("API Response from system was not as expected")
+//                .usingRecursiveComparison().isEqualTo(expectedApiResponse);
+//
+//    }
 
 
 }
